@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float moveSpeed;
-    private Vector2 playerMovement;
+    private Vector3 playerMovement;
     Rigidbody rb;
 
     private void Awake()
@@ -27,11 +27,11 @@ public class PlayerMovement : MonoBehaviour
 
     void OnMove(InputValue value)
     {
-        playerMovement = value.Get<Vector2>();
+        playerMovement = value.Get<Vector3>();
     }
 
     void MovePlayer()
     {
-        rb.velocity = new Vector3(playerMovement.x * moveSpeed, rb.velocity.y, playerMovement.y * moveSpeed);
+        rb.velocity = new Vector3(playerMovement.x * moveSpeed, rb.velocity.y, playerMovement.z * moveSpeed);
     }
 }
