@@ -10,11 +10,20 @@ public class EnemyBehavior : MonoBehaviour
     private float enemySpeed;
     //this is the players location
     private Transform player;
+    
     //List of potential stalking locations that enemy might chose 
     public List<GameObject> peakingNodes = new List<GameObject>();
 
-    private bool isChasing = false;
+
+    bool isChasing = false;
     bool isWandering = false;
+    bool isFleeing = false;
+
+    bool isPatrolling = false;
+    Vector3 patrolTarget;
+    int patrolIndex;
+    public Transform[] patrolRoute;
+
     
 
     void Start()
@@ -24,7 +33,8 @@ public class EnemyBehavior : MonoBehaviour
         enemy.acceleration = 200f;
         player = GameObject.FindWithTag("Player").transform;
         
-
+        //isPatrolling = true;
+        //UpdatePatrolDestination();
         StartCoroutine(movementOpportunity());
     }
 
@@ -51,24 +61,61 @@ public class EnemyBehavior : MonoBehaviour
                 }
             }  
         }
+
+        if(isPatrolling){
+            //Debug.Log(Vector3.Distance(transform.position, patrolTarget));
+            if(Vector3.Distance(transform.position, patrolTarget) < 1){
+                Debug.Log("We In");
+                UpdatePatrolDestination();
+                InterateWaypointIndex();
+            }
+        }
+
+        if(isFleeing){
+            Flee();
+        }
     }
 
     IEnumerator movementOpportunity(){
         while(true){
-            if(Random.value < 0.1f){
-                chasePlayer();
-            }else if(Random.value < 0.9f){
-               stalk(); 
+            if(Random.value < 1f){
+                ChasePlayer();
+                yield return new WaitForSeconds(8f);
+                isFleeing = true;
+                enemySpeed = 10f;
+                isChasing = false;
+                Debug.Log("Stopped Chasing");
+                //StartCoroutine(movementOpportunity());
+                yield break;
+            }else if(Random.value < 0.5f){
+                Stalk(); 
+            } else{
+                Wandering();
+                yield return new WaitForSeconds(5f);
+                isWandering = false;
             }
             
            
 
             yield return new WaitForSeconds(5f);
-            isChasing = false;
-            isWandering = false;
+            Debug.Log("New Decesion has been made");
         }
     }
-    public void stalk(){
+    
+    void UpdatePatrolDestination(){
+        Debug.Log("Hey");
+        patrolTarget = patrolRoute[patrolIndex].position;
+        enemy.SetDestination(patrolTarget);
+    }
+
+    void InterateWaypointIndex(){
+        patrolIndex++;
+        if(patrolIndex == patrolRoute.Length){
+            patrolIndex = 0;
+        }
+    }
+
+   void Stalk(){
         Debug.Log("Stalking");
         if(peakingNodes.Count > 0){
             enemySpeed = 10f;
@@ -77,14 +124,22 @@ public class EnemyBehavior : MonoBehaviour
         
     }
 
-    public void chasePlayer(){
+    void ChasePlayer(){
         Debug.Log("Chasing");
         enemySpeed = 2f;
         isChasing = true;
 
     }
 
-    void wandering(){
+    void Flee(){
+        Debug.Log("Fleying");
+        enemySpeed = 10f;
+        Vector3 FleeDestination = transform.position - player.position;
+        Vector3 newPos = transform.position + FleeDestination * 2;
+        enemy.SetDestination(newPos);
+    }
+
+    void Wandering(){
         Debug.Log("Wandering");
         enemySpeed = 2f;
         isWandering = true;
@@ -119,6 +174,7 @@ public class EnemyBehavior : MonoBehaviour
 
     //Add potential location for the enemy to stalk the player
     public void addToPeakingLocations(GameObject obj ){
+        Debug.Log("added");
         //checks if a location is already considered, if not add it
         if(!peakingNodes.Contains(obj)){
             peakingNodes.Add(obj);
