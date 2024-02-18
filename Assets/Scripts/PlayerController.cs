@@ -47,14 +47,12 @@ public class PlayerController : MonoBehaviour
         {
             eyesOpen = false;
             eyes.GetComponent<Animator>().SetTrigger("CloseEyes");
-            Debug.Log("Player's eyes are closed and  can move");
         }
         else if (!eyesOpen)
         {
             eyesOpen = true;
             eyes.GetComponent<Animator>().SetTrigger("OpenEyes");
             rb.velocity = Vector3.zero;
-            Debug.Log("Player's eyes are open and cannot move");
         }
     }
 

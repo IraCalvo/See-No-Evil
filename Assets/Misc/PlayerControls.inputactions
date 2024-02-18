@@ -34,7 +34,7 @@
                 },
                 {
                     "name": "Blink",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "978abf5c-9392-400f-86af-6129a2f7ae20",
                     "expectedControlType": "",
                     "processors": "",
