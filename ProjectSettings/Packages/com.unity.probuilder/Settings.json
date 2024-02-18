@@ -169,13 +169,11 @@
             {
                 "type": "UnityEngine.ProBuilder.SelectMode, Unity.ProBuilder, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "editor.selectMode",
-                "value": "{\"m_Value\":8}"
                 "value": "{\"m_Value\":1}"
             },
             {
                 "type": "UnityEngine.ProBuilder.SelectMode, Unity.ProBuilder, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "editor.lastMeshSelectMode",
-                "value": "{\"m_Value\":8}"
                 "value": "{\"m_Value\":2}"
             },
             {
@@ -206,13 +204,11 @@
             {
                 "type": "UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "ShapeBuilder.LastPivotPosition",
-                "value": "{\"m_Value\":{\"x\":-1.3391152620315552,\"y\":0.0,\"z\":-0.7858390808105469}}"
                 "value": "{\"m_Value\":{\"x\":-2.6007423400878908,\"y\":-1.6147232055664063,\"z\":-2.6390066146850588}}"
             },
             {
                 "type": "UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "ShapeBuilder.LastSize",
-                "value": "{\"m_Value\":{\"x\":5.0,\"y\":5.0,\"z\":5.0}}"
                 "value": "{\"m_Value\":{\"x\":5.201484680175781,\"y\":3.2294466495513918,\"z\":5.278013229370117}}"
             },
             {
