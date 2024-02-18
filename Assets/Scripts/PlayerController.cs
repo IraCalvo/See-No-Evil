@@ -9,13 +9,15 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed;
     [SerializeField] float mouseSens;
+    [SerializeField] GameObject eyes;
+    private bool eyesOpen = true;
 
     float verticalRotation = 0f;
     private Vector2 playerMovement;
     private Vector2 mouseDelta;
     Rigidbody rb;
     Transform playerBody;
-
+    
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -39,11 +41,31 @@ public class PlayerController : MonoBehaviour
         mouseDelta = delta.Get<Vector2>();
     }
 
+    void OnBlink(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            eyesOpen = false;
+            eyes.GetComponent<Animator>().SetTrigger("CloseEyes");
+            Debug.Log("Player's eyes are closed and  can move");
+        }
+        else if (!eyesOpen)
+        {
+            eyesOpen = true;
+            eyes.GetComponent<Animator>().SetTrigger("OpenEyes");
+            rb.velocity = Vector3.zero;
+            Debug.Log("Player's eyes are open and cannot move");
+        }
+    }
+
     void MovePlayer()
     {
-        Vector3 forwardDirection = playerBody.forward;
-        Vector3 movement = forwardDirection * playerMovement.y + playerBody.right * playerMovement.x;
-        rb.velocity = movement * moveSpeed;
+        if(!eyesOpen)
+        {
+            Vector3 forwardDirection = playerBody.forward;
+            Vector3 movement = forwardDirection * playerMovement.y + playerBody.right * playerMovement.x;
+            rb.velocity = movement * moveSpeed;
+        }
 
         playerBody.Rotate(Vector3.up * mouseDelta.x * mouseSens * Time.fixedDeltaTime);
 
