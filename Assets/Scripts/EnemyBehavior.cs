@@ -36,7 +36,8 @@ public class EnemyBehavior : MonoBehaviour
        
         enemy = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag("Player").transform;
-
+        isPatrolling = true;
+        UpdatePatrolDestination();
         //starts the monsters AI
         StartCoroutine(movementOpportunity());
     }
@@ -81,18 +82,19 @@ public class EnemyBehavior : MonoBehaviour
 
     IEnumerator movementOpportunity(){
         while(true){
-            if(Random.value < 0.6f){
-                isPatrolling = true;
-                enemy.speed = 2f;
-                UpdatePatrolDestination();
-                Debug.Log("Patroling");
-            }else{
+
+            if(Random.value < 0.0f && peakingNodes.Count > 0){
                 isPatrolling = false;
                 Stalk(); 
-                
+
+            }else{                
+                //isPatrolling = true;
+                //enemy.speed = 2f;
+                //UpdatePatrolDestination();
+                //Debug.Log("Patroling");
             }
             yield return new WaitForSeconds(5f);
-            Debug.Log("New Decesion has been made");
+            //Debug.Log("New Decesion has been made");
         }
     }
 
@@ -119,11 +121,13 @@ public class EnemyBehavior : MonoBehaviour
     //Deals with patrols and updating where to go
     void UpdatePatrolDestination(){
         patrolTarget = patrolRoute[patrolIndex].position;
+        Debug.Log(patrolRoute[patrolIndex].gameObject);
         enemy.SetDestination(patrolTarget);
     }
 
     void InterateWaypointIndex(){
         patrolIndex++;
+        Debug.Log(patrolIndex == patrolRoute.Length);
         if(patrolIndex == patrolRoute.Length){
             patrolIndex = 0;
         }
