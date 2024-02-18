@@ -57,12 +57,11 @@ public class EnemyBehavior : MonoBehaviour
         while(true){
             if(Random.value < 0.1f){
                 chasePlayer();
-            }else if(Random.value < 0.3f){
+            }else if(Random.value < 0.9f){
                stalk(); 
-            }else{
-            wandering();
-               isWandering = true;
             }
+            
+           
 
             yield return new WaitForSeconds(5f);
             isChasing = false;
