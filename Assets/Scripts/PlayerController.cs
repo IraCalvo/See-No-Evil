@@ -9,8 +9,10 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed;
     [SerializeField] float mouseSens;
+    [SerializeField] float timerToOpenEyes;
     [SerializeField] GameObject eyes;
-    private bool eyesOpen = true;
+    [SerializeField] bool eyesOpen = true;
+    [SerializeField] bool canOpenEyes;
 
     float verticalRotation = 0f;
     private Vector2 playerMovement;
@@ -43,12 +45,11 @@ public class PlayerController : MonoBehaviour
 
     void OnBlink(InputValue value)
     {
-        if (value.isPressed)
+        if (value.isPressed && eyesOpen)
         {
-            eyesOpen = false;
-            eyes.GetComponent<Animator>().SetTrigger("CloseEyes");
+            StartCoroutine(StartOpenEyeTimerCoroutine());
         }
-        else if (!eyesOpen)
+        else if (!eyesOpen && canOpenEyes)
         {
             eyesOpen = true;
             eyes.GetComponent<Animator>().SetTrigger("OpenEyes");
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviour
 
     void MovePlayer()
     {
+        //eyes are closed and can move
         if(!eyesOpen)
         {
             Vector3 forwardDirection = playerBody.forward;
@@ -71,4 +73,16 @@ public class PlayerController : MonoBehaviour
         verticalRotation = Mathf.Clamp(verticalRotation, -90f, 75f);
         Camera.main.transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
     }
+
+    IEnumerator StartOpenEyeTimerCoroutine()
+    {
+        eyesOpen = false;
+        eyes.GetComponent<Animator>().SetTrigger("CloseEyes");
+        canOpenEyes = false;
+        yield return new WaitForSeconds(timerToOpenEyes);
+        canOpenEyes = true;
+    }
 }
+
+//logic: timer for when the player closes their eyes, then they can move as well as when they can open their eyes again.
+//issue: spamming space bar makes it so that they dont enter the else if.

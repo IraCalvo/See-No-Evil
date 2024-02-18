@@ -1697,7 +1697,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   mouseSens: 10
+  timerToOpenEyes: 0
   eyes: {fileID: 1393250732}
+  eyesOpen: 1
+  canOpenEyes: 0
 --- !u!54 &116033474
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13539,6 +13542,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1802934207}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &653516203 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2642379346555739464, guid: 5027c432450799d4d848606a779aa854, type: 3}
+  m_PrefabInstance: {fileID: 947905311}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &653516207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653516203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: 1490bcff1f7746c42832d4d24782271c, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &654886094
 GameObject:
   m_ObjectHideFlags: 0
@@ -16898,20 +16933,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4408349752975106795, guid: 5027c432450799d4d848606a779aa854, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6556208133558701567, guid: 5027c432450799d4d848606a779aa854, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7038987900090049676, guid: 5027c432450799d4d848606a779aa854, type: 3}
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3770715395785895554, guid: 5027c432450799d4d848606a779aa854, type: 3}
+    - {fileID: 190193759769288422, guid: 5027c432450799d4d848606a779aa854, type: 3}
+    - {fileID: 4810703312208278958, guid: 5027c432450799d4d848606a779aa854, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3543819115077370621, guid: 5027c432450799d4d848606a779aa854, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2027915073}
+    - targetCorrespondingSourceObject: {fileID: 2571119019248209639, guid: 5027c432450799d4d848606a779aa854, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1101683086}
+    - targetCorrespondingSourceObject: {fileID: 6806930518494646188, guid: 5027c432450799d4d848606a779aa854, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1777293974}
+    - targetCorrespondingSourceObject: {fileID: 2642379346555739464, guid: 5027c432450799d4d848606a779aa854, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 653516207}
   m_SourcePrefab: {fileID: 100100000, guid: 5027c432450799d4d848606a779aa854, type: 3}
 --- !u!1 &950769671
 GameObject:
@@ -19533,6 +19583,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 720027797}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1101683082 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2571119019248209639, guid: 5027c432450799d4d848606a779aa854, type: 3}
+  m_PrefabInstance: {fileID: 947905311}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1101683086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101683082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: 1490bcff1f7746c42832d4d24782271c, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &1113475537
 GameObject:
   m_ObjectHideFlags: 0
@@ -34712,6 +34794,38 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1777293970 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6806930518494646188, guid: 5027c432450799d4d848606a779aa854, type: 3}
+  m_PrefabInstance: {fileID: 947905311}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1777293974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777293970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: 1490bcff1f7746c42832d4d24782271c, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &1784388470
 GameObject:
   m_ObjectHideFlags: 0
@@ -40204,6 +40318,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2065422324}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2027915069 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3543819115077370621, guid: 5027c432450799d4d848606a779aa854, type: 3}
+  m_PrefabInstance: {fileID: 947905311}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2027915073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027915069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: 1490bcff1f7746c42832d4d24782271c, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &2034859317
 GameObject:
   m_ObjectHideFlags: 0
@@ -42020,7 +42166,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   mouseSens: 10
+  timerToOpenEyes: 1
   eyes: {fileID: 1393250732}
+  eyesOpen: 1
+  canOpenEyes: 0
 --- !u!54 &2073578123
 Rigidbody:
   m_ObjectHideFlags: 0
