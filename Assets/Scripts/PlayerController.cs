@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
         playerBody.Rotate(Vector3.up * mouseDelta.x * mouseSens * Time.fixedDeltaTime);
 
         verticalRotation -= mouseDelta.y * mouseSens * Time.fixedDeltaTime;
-        verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
+        verticalRotation = Mathf.Clamp(verticalRotation, -90f, 75f);
         Camera.main.transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
     }
 }
