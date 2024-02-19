@@ -159,6 +159,7 @@ public class EnemyBehavior : MonoBehaviour
     //NEVER IS USED
     public void Flee(){
         Debug.Log("Fleeing");
+        AudioManager.instance.PlaySFX(1);
         enemy.speed = 10f;
         Vector3 FleeDestination = transform.position - player.position;
         Vector3 newPos = transform.position + FleeDestination * 2;

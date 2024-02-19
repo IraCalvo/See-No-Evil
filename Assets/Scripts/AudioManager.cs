@@ -6,6 +6,7 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
     [SerializeField] AudioSource[] sfx;
+    [SerializeField] AudioSource[] ambientSFX;
 
     private void Awake()
     {
@@ -22,7 +23,7 @@ public class AudioManager : MonoBehaviour
     }
 
     public void PlaySFX(int sfxToPlay)
-    { 
-        
+    {
+        sfx[sfxToPlay].Play();
     }
 }

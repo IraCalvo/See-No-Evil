@@ -12,25 +12,32 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float mouseSens;
     [SerializeField] float timerToOpenEyes;
     [SerializeField] GameObject eyes;
+    public GameObject gun;
     [SerializeField] float timeBetweenShots;
+    [SerializeField] AudioClip[] footSteps;
     public bool eyesOpen = true;
     bool canOpenEyes;
     bool canShoot = true;
-    [SerializeField] int ammoCount;
+    bool footStepsPlaying;
+    public int ammoCount;
 
     float verticalRotation = 0f;
     private Vector2 playerMovement;
     private Vector2 mouseDelta;
     Rigidbody rb;
     Transform playerBody;
-    
+    AudioSource audioSource;
+
+    [Header("bools for player progression")]
+    public bool hasKey;
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
         }
-        else 
+        else
         {
             Destroy(gameObject);
         }
@@ -38,7 +45,8 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
         playerBody = GetComponent<Transform>();
-        CanvasManager.instance.ammoText.text = "Ammo: " + ammoCount.ToString();
+        audioSource = GetComponent<AudioSource>();
+        gun.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -81,11 +89,19 @@ public class PlayerController : MonoBehaviour
     void MovePlayer()
     {
         //eyes are closed and can move
-        if(!eyesOpen)
+        if (!eyesOpen)
         {
             Vector3 forwardDirection = playerBody.forward;
             Vector3 movement = forwardDirection * playerMovement.y + playerBody.right * playerMovement.x;
             rb.velocity = movement * moveSpeed;
+            if (rb.velocity.magnitude > 0)
+            {
+                if (footStepsPlaying == false)
+                {
+                    PlayFootStepSFX();
+                    footStepsPlaying = true;
+                }
+            }
         }
 
         playerBody.Rotate(Vector3.up * mouseDelta.x * mouseSens * Time.fixedDeltaTime);
@@ -93,6 +109,19 @@ public class PlayerController : MonoBehaviour
         verticalRotation -= mouseDelta.y * mouseSens * Time.fixedDeltaTime;
         verticalRotation = Mathf.Clamp(verticalRotation, -90f, 75f);
         Camera.main.transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+    }
+
+    void PlayFootStepSFX()
+    {
+        int n = Random.Range(1, footSteps.Length);
+
+        audioSource.clip = footSteps[n];
+        audioSource.PlayOneShot(audioSource.clip);
+
+        StartCoroutine(WaitForFoorStepCoroutine(audioSource.clip.length));
+
+        footSteps[n] = footSteps[0];
+        footSteps[0] = audioSource.clip;
     }
 
     IEnumerator StartOpenEyeTimerCoroutine()
@@ -116,13 +145,21 @@ public class PlayerController : MonoBehaviour
             {
                 hit.collider.GetComponent<EnemyBehavior>().Flee();
             }
-            else 
+            else
             {
                 Debug.Log("hit the:" + hit.collider.gameObject.name);
             }
         }
         //play sfx
+        AudioManager.instance.PlaySFX(0);
         yield return new WaitForSeconds(timeBetweenShots);
         canShoot = true;
+    }
+
+    IEnumerator WaitForFoorStepCoroutine(float delay)
+    {
+        footStepsPlaying = true;
+        yield return new WaitForSeconds(delay);
+        footStepsPlaying = false;
     }
 }
