@@ -7,12 +7,16 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController instance;
     [SerializeField] float moveSpeed;
     [SerializeField] float mouseSens;
     [SerializeField] float timerToOpenEyes;
     [SerializeField] GameObject eyes;
-    [SerializeField] bool eyesOpen = true;
-    [SerializeField] bool canOpenEyes;
+    [SerializeField] float timeBetweenShots;
+    public bool eyesOpen = true;
+    bool canOpenEyes;
+    bool canShoot = true;
+    [SerializeField] int ammoCount;
 
     float verticalRotation = 0f;
     private Vector2 playerMovement;
@@ -22,6 +26,14 @@ public class PlayerController : MonoBehaviour
     
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else 
+        {
+            Destroy(gameObject);
+        }
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
@@ -57,6 +69,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void OnFire(InputValue value)
+    {
+        if (canShoot && ammoCount >= 1 && !eyesOpen)
+        {
+            StartCoroutine(ShootGunCoroutine());
+        }
+    }
+
     void MovePlayer()
     {
         //eyes are closed and can move
@@ -82,7 +102,25 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(timerToOpenEyes);
         canOpenEyes = true;
     }
-}
 
-//logic: timer for when the player closes their eyes, then they can move as well as when they can open their eyes again.
-//issue: spamming space bar makes it so that they dont enter the else if.
+    IEnumerator ShootGunCoroutine()
+    {
+        canShoot = false;
+        ammoCount--;
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit))
+        {
+            if (hit.collider.GetComponent<EnemyBehavior>())
+            {
+                Debug.Log("Do stuff here");
+            }
+            else 
+            {
+                Debug.Log("hit the:" + hit.collider.gameObject.name);
+            }
+        }
+        //play sfx
+        yield return new WaitForSeconds(timeBetweenShots);
+        canShoot = true;
+    }
+}

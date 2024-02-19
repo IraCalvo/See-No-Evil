@@ -6,16 +6,33 @@ using UnityEngine.InputSystem;
 interface IInteractable
 {
     public void Interact();
+    public void InteractText();
 }
 
 public class Interact : MonoBehaviour
 {
     private Transform InteractorSource;
-    public float interactRange;
+    [SerializeField] float interactRange;
 
     private void Awake()
     {
         InteractorSource = GetComponent<Transform>();
+    }
+
+    private void Update()
+    {
+        Ray ray = new Ray(InteractorSource.position, InteractorSource.forward);
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, interactRange))
+        {
+            if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
+            {
+                interactObj.InteractText();
+            }
+        }
+        else
+        {
+            CanvasManager.instance.interactText.enabled = false;
+        }
     }
 
     void OnInteract(InputValue value)
