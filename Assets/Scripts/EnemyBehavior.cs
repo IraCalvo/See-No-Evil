@@ -45,44 +45,48 @@ public class EnemyBehavior : MonoBehaviour
 
     void Update()
     {
-       //Always Look at the player
-       if(isChasing || isStalking){
-            transform.LookAt(player.position);
-       }else{
-            transform.rotation = Quaternion.LookRotation(enemy.velocity.normalized);
-       }
-       
-        //When is Chasing is true follow player
-        if(isChasing){
-            enemy.SetDestination(player.position);
-        } 
-
-
-        if(isWandering){
-            if(enemy.remainingDistance <= enemy.stoppingDistance) //done with path
-            {
-                Vector3 point;
-                if (wander(transform.position, 5.0f, out point)) //pass in our centre point and radius of area
-                {
-                    Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
-                    enemy.SetDestination(point);
-                }
-            }  
-        }
-
-        if(isPatrolling){
-            //Debug.Log(Vector3.Distance(transform.position, patrolTarget));
-            if(Vector3.Distance(transform.position, patrolTarget) < 1.4f){
-                UpdatePatrolDestination();
-                InterateWaypointIndex();
+        if(!PlayerController.instance.eyesOpen){
+            //Always Look at the player
+            if(isChasing || isStalking){
+                transform.LookAt(player.position);
+            }else{
+                transform.rotation = Quaternion.LookRotation(enemy.velocity.normalized);
+                
             }
-        }
+            
+                //When is Chasing is true follow player
+            if(isChasing){
+                enemy.SetDestination(player.position);
+            } 
 
 
-        //NEVER GETS CALLED
-        if(isFleeing){
-            Flee();
+            if(isWandering){
+                if(enemy.remainingDistance <= enemy.stoppingDistance) //done with path
+                {
+                    Vector3 point;
+                    if (wander(transform.position, 5.0f, out point)) //pass in our centre point and radius of area
+                    {
+                        Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
+                        enemy.SetDestination(point);
+                    }
+                }  
+            }
+
+            if(isPatrolling){
+                //Debug.Log(Vector3.Distance(transform.position, patrolTarget));
+                if(Vector3.Distance(transform.position, patrolTarget) < 1.4f){
+                    UpdatePatrolDestination();
+                    InterateWaypointIndex();
+                }
+            }
+
+
+            //NEVER GETS CALLED
+            if(isFleeing){
+                Flee();
+            } 
         }
+      
     }
     
 
