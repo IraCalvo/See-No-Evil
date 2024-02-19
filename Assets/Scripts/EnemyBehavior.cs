@@ -153,7 +153,7 @@ public class EnemyBehavior : MonoBehaviour
    
 
     //NEVER IS USED
-    void Flee(){
+    public void Flee(){
         Debug.Log("Fleeing");
         enemy.speed = 10f;
         Vector3 FleeDestination = transform.position - player.position;

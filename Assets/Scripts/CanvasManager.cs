@@ -7,6 +7,7 @@ public class CanvasManager : MonoBehaviour
 {
     public static CanvasManager instance;
     public TextMeshProUGUI interactText;
+    public TextMeshProUGUI ammoText;
 
     private void Awake()
     {

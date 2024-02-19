@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
         playerBody = GetComponent<Transform>();
+        CanvasManager.instance.ammoText.text = "Ammo: " + ammoCount.ToString();
     }
 
     private void FixedUpdate()
@@ -107,12 +108,13 @@ public class PlayerController : MonoBehaviour
     {
         canShoot = false;
         ammoCount--;
+        CanvasManager.instance.ammoText.text = "Ammo: " + ammoCount.ToString();
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit))
         {
             if (hit.collider.GetComponent<EnemyBehavior>())
             {
-                Debug.Log("Do stuff here");
+                hit.collider.GetComponent<EnemyBehavior>().Flee();
             }
             else 
             {
