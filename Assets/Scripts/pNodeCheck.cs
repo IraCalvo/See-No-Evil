@@ -19,13 +19,15 @@ public class pNodeCheck : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider col){        
-        if(col.CompareTag("pNode")){       
+        if(col.CompareTag("pNode")){   
+            Debug.Log(col.gameObject);    
             eScript.addToPeakingLocations(col.gameObject);
         }
     }
     
     private void OnTriggerExit(Collider col){        
-        if(col.CompareTag("pNode")){       
+        if(col.CompareTag("pNode")){  
+            Debug.Log("removed");      
             eScript.removeFromPeakingLocations(col.gameObject);
         }
     }

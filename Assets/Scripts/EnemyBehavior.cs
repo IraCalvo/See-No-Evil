@@ -19,6 +19,7 @@ public class EnemyBehavior : MonoBehaviour
     bool isWandering = false;
     bool isFleeing = false;
     bool isPatrolling = false;
+    bool isStalking = false;
 
     //PatrolTarget is next location to go when isPatrol is true
     Vector3 patrolTarget;
@@ -45,8 +46,12 @@ public class EnemyBehavior : MonoBehaviour
     void Update()
     {
        //Always Look at the player
-        transform.LookAt(player.position);
-        
+       if(isChasing || isStalking){
+            transform.LookAt(player.position);
+       }else{
+            transform.rotation = Quaternion.LookRotation(enemy.velocity.normalized);
+       }
+       
         //When is Chasing is true follow player
         if(isChasing){
             enemy.SetDestination(player.position);
@@ -66,7 +71,8 @@ public class EnemyBehavior : MonoBehaviour
         }
 
         if(isPatrolling){
-            if(Vector3.Distance(transform.position, patrolTarget) < 1){
+            //Debug.Log(Vector3.Distance(transform.position, patrolTarget));
+            if(Vector3.Distance(transform.position, patrolTarget) < 1.4f){
                 UpdatePatrolDestination();
                 InterateWaypointIndex();
             }
@@ -83,15 +89,16 @@ public class EnemyBehavior : MonoBehaviour
     IEnumerator movementOpportunity(){
         while(true){
 
-            if(Random.value < 0.0f && peakingNodes.Count > 0){
+            if(Random.value < 0.5f && peakingNodes.Count > 0){
                 isPatrolling = false;
-                Stalk(); 
+                isStalking = true;
+                StartCoroutine(Stalk());    
 
             }else{                
-                //isPatrolling = true;
-                //enemy.speed = 2f;
-                //UpdatePatrolDestination();
-                //Debug.Log("Patroling");
+                isPatrolling = true;
+                enemy.speed = 2f;
+                UpdatePatrolDestination();
+                Debug.Log("Patroling");
             }
             yield return new WaitForSeconds(5f);
             //Debug.Log("New Decesion has been made");
@@ -117,31 +124,33 @@ public class EnemyBehavior : MonoBehaviour
         isWandering = false;
 
     }
+
+    IEnumerator Stalk(){
+        Debug.Log("Stalking");
+        if(peakingNodes.Count > 0){
+            enemy.speed = 8f;
+            enemy.SetDestination(peakingNodes[Random.Range(0,peakingNodes.Count)].transform.position);
+        }
+        yield return new WaitForSeconds(8f);
+        isStalking = false;
+    }
     
     //Deals with patrols and updating where to go
     void UpdatePatrolDestination(){
         patrolTarget = patrolRoute[patrolIndex].position;
-        Debug.Log(patrolRoute[patrolIndex].gameObject);
+        //Debug.Log(patrolRoute[patrolIndex].gameObject);
         enemy.SetDestination(patrolTarget);
     }
 
     void InterateWaypointIndex(){
         patrolIndex++;
-        Debug.Log(patrolIndex == patrolRoute.Length);
+        //Debug.Log(patrolIndex == patrolRoute.Length);
         if(patrolIndex == patrolRoute.Length){
             patrolIndex = 0;
         }
     }
     ///////////////////////////////////////////////
    
-   void Stalk(){
-        Debug.Log("Stalking");
-        if(peakingNodes.Count > 0){
-            enemy.speed = 10f;
-            enemy.SetDestination(peakingNodes[Random.Range(0,peakingNodes.Count)].transform.position);
-        }
-        
-    }
 
     //NEVER IS USED
     void Flee(){
@@ -171,6 +180,7 @@ public class EnemyBehavior : MonoBehaviour
     //Add potential location for the enemy to stalk the player
     public void addToPeakingLocations(GameObject obj ){
         //checks if a location is already considered, if not add it
+        Debug.Log(obj);
         if(!peakingNodes.Contains(obj)){
             peakingNodes.Add(obj);
         }
