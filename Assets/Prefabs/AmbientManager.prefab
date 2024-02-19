@@ -51,7 +51,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ba215b3353512f14ebf545391edaa41b, type: 3}
   - {fileID: 8300000, guid: e378fa0034dcdfc4f84c14790d4222e4, type: 3}
   - {fileID: 8300000, guid: 5e5645795693f054ba9c77a698f209e3, type: 3}
-  minimumAmountOfTimeBetweenSounds: 60
+  - {fileID: 8300000, guid: 355e8ea965aef8545adc4d43932bdbf4, type: 3}
+  - {fileID: 8300000, guid: 3deba87cafaf19744945180e89151252, type: 3}
+  - {fileID: 8300000, guid: 79ffdbc07357b6249b1a01859755d4f4, type: 3}
+  - {fileID: 8300000, guid: 9a40d7df1a0c2ad40ab8c1a1a427ba99, type: 3}
+  - {fileID: 8300000, guid: 0316e4322c6f3d444a93d1ab5285a346, type: 3}
+  - {fileID: 8300000, guid: 9dd318b00a3796e48bc9e973a1dad2eb, type: 3}
+  minimumAmountOfTimeBetweenSounds: 45
   maximumAmountOfTimeBetweenSounds: 90
 --- !u!82 &4787179234009338378
 AudioSource:
@@ -65,7 +71,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.248
   m_Pitch: 1
   Loop: 0
   Mute: 0

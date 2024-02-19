@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,11 +16,13 @@ public class PlayerController : MonoBehaviour
     public GameObject gun;
     [SerializeField] float timeBetweenShots;
     [SerializeField] AudioClip[] footSteps;
+    public Transform playerLight;
     public bool eyesOpen = true;
     bool canOpenEyes;
     bool canShoot = true;
     bool footStepsPlaying;
     public int ammoCount;
+    bool hasBlinkedOnce = false;
 
     float verticalRotation = 0f;
     private Vector2 playerMovement;
@@ -30,6 +33,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("bools for player progression")]
     public bool hasKey;
+    public bool hasWrench;
 
     private void Awake()
     {
@@ -47,6 +51,7 @@ public class PlayerController : MonoBehaviour
         playerBody = GetComponent<Transform>();
         audioSource = GetComponent<AudioSource>();
         gun.SetActive(false);
+        playerLight.gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -66,7 +71,13 @@ public class PlayerController : MonoBehaviour
 
     void OnBlink(InputValue value)
     {
-        if (value.isPressed && eyesOpen)
+        if(value.isPressed && !hasBlinkedOnce)
+        {
+            hasBlinkedOnce = true;
+            CanvasManager.instance.RemoveStartScreen();
+            StartCoroutine(StartOpenEyeTimerCoroutine());
+        }
+        else if (value.isPressed && eyesOpen)
         {
             StartCoroutine(StartOpenEyeTimerCoroutine());
         }

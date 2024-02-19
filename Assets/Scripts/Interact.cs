@@ -31,7 +31,11 @@ public class Interact : MonoBehaviour
         }
         else
         {
-            CanvasManager.instance.interactText.enabled = false;
+            if (CanvasManager.instance.interactText != null)
+            {
+                CanvasManager.instance.interactText.enabled = false;
+            }
+
         }
     }
 

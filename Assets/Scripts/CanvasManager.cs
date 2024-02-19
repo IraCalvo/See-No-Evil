@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class CanvasManager : MonoBehaviour
 {
     public static CanvasManager instance;
+    public TextMeshProUGUI title;
+    public TextMeshProUGUI pressSpaceBar;
     public TextMeshProUGUI interactText;
     public TextMeshProUGUI ammoText;
     public GameObject crossHair; 
@@ -24,5 +26,15 @@ public class CanvasManager : MonoBehaviour
 
         interactText.enabled = false;
         crossHair.SetActive(false);
+    }
+
+    public void RemoveStartScreen()
+    {
+        if (title == null)
+        {
+            return;
+        }
+        title.enabled = false;
+        pressSpaceBar.enabled = false;
     }
 }
