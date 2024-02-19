@@ -7,10 +7,10 @@ public class EnemyBehavior : MonoBehaviour
 {
     //this is the enemy's navMeshAgent
     private NavMeshAgent enemy;
-    
+
     //this is the players location
     private Transform player;
-    
+
     //List of potential stalking locations that enemy might chose 
     public List<GameObject> peakingNodes = new List<GameObject>();
 
@@ -23,18 +23,18 @@ public class EnemyBehavior : MonoBehaviour
 
     //PatrolTarget is next location to go when isPatrol is true
     Vector3 patrolTarget;
-    
+
     //Keeps track on what patrol node the enemy is on
     int patrolIndex;
-    
+
     //The list of nodes of where to patrol
     public Transform[] patrolRoute;
 
-    
+
 
     void Start()
     {
-       
+
         enemy = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag("Player").transform;
         isPatrolling = true;
@@ -45,61 +45,75 @@ public class EnemyBehavior : MonoBehaviour
 
     void Update()
     {
-        if(!PlayerController.instance.eyesOpen){
-            //Always Look at the player
-            if(isChasing || isStalking){
-                transform.LookAt(player.position);
-            }else{
-                transform.rotation = Quaternion.LookRotation(enemy.velocity.normalized);
-                
-            }
-            
-                //When is Chasing is true follow player
-            if(isChasing){
-                enemy.SetDestination(player.position);
-            } 
+
+        //Always Look at the player
+        if (isChasing || isStalking)
+        {
+            transform.LookAt(player.position);
+        }
+        else
+        {
+            transform.rotation = Quaternion.LookRotation(enemy.velocity.normalized);
+
+        }
+
+        //When is Chasing is true follow player
+        if (isChasing)
+        {
+            enemy.SetDestination(player.position);
+        }
 
 
-            if(isWandering){
-                if(enemy.remainingDistance <= enemy.stoppingDistance) //done with path
+        if (isWandering)
+        {
+            if (enemy.remainingDistance <= enemy.stoppingDistance) //done with path
+            {
+                Vector3 point;
+                if (wander(transform.position, 5.0f, out point)) //pass in our centre point and radius of area
                 {
-                    Vector3 point;
-                    if (wander(transform.position, 5.0f, out point)) //pass in our centre point and radius of area
-                    {
-                        Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
-                        enemy.SetDestination(point);
-                    }
-                }  
-            }
-
-            if(isPatrolling){
-                //Debug.Log(Vector3.Distance(transform.position, patrolTarget));
-                if(Vector3.Distance(transform.position, patrolTarget) < 1.4f){
-                    UpdatePatrolDestination();
-                    InterateWaypointIndex();
+                    Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
+                    enemy.SetDestination(point);
                 }
             }
-
-
-            //NEVER GETS CALLED
-            if(isFleeing){
-                Flee();
-            } 
         }
-      
+
+        if (isPatrolling)
+        {
+            Debug.Log(Vector3.Distance(transform.position, patrolTarget));
+            if (Vector3.Distance(transform.position, patrolTarget) < 1.5f)
+            {
+                UpdatePatrolDestination();
+                InterateWaypointIndex();
+            }
+        }
+
+
+        //NEVER GETS CALLED
+        if (isFleeing)
+        {
+            Flee();
+        }
+
+
     }
-    
 
-    IEnumerator movementOpportunity(){
-        while(true){
 
-            if(Random.value < 0.5f && peakingNodes.Count > 0){
+    IEnumerator movementOpportunity()
+    {
+        while (true)
+        {
+
+            if (Random.value < 0.5f && peakingNodes.Count > 0)
+            {
                 isPatrolling = false;
                 isStalking = true;
-                StartCoroutine(Stalk());    
+                StartCoroutine(Stalk());
 
-            }else{                
+            }
+            else
+            {
                 isPatrolling = true;
+                Debug.Log("Is p " + isPatrolling);
                 enemy.speed = 2f;
                 UpdatePatrolDestination();
                 Debug.Log("Patroling");
@@ -109,19 +123,21 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
-    IEnumerator ChasePlayer(){
+    IEnumerator ChasePlayer()
+    {
         Debug.Log("Chasing");
         enemy.speed = 2f;
         isChasing = true;
-        yield return new WaitForSeconds(5f); 
-        isChasing = false; 
-        StartCoroutine(Wandering());    
+        yield return new WaitForSeconds(5f);
+        isChasing = false;
+        StartCoroutine(Wandering());
 
     }
 
-    IEnumerator Wandering(){
+    IEnumerator Wandering()
+    {
         Debug.Log("Wandering");
-        enemy.speed= 2f;
+        enemy.speed = 2f;
         isWandering = true;
         yield return new WaitForSeconds(8f);
         StartCoroutine(movementOpportunity());
@@ -129,35 +145,41 @@ public class EnemyBehavior : MonoBehaviour
 
     }
 
-    IEnumerator Stalk(){
+    IEnumerator Stalk()
+    {
         Debug.Log("Stalking");
-        if(peakingNodes.Count > 0){
+        if (peakingNodes.Count > 0)
+        {
             enemy.speed = 8f;
-            enemy.SetDestination(peakingNodes[Random.Range(0,peakingNodes.Count)].transform.position);
+            enemy.SetDestination(peakingNodes[Random.Range(0, peakingNodes.Count)].transform.position);
         }
         yield return new WaitForSeconds(8f);
         isStalking = false;
     }
-    
+
     //Deals with patrols and updating where to go
-    void UpdatePatrolDestination(){
+    void UpdatePatrolDestination()
+    {
         patrolTarget = patrolRoute[patrolIndex].position;
         //Debug.Log(patrolRoute[patrolIndex].gameObject);
         enemy.SetDestination(patrolTarget);
     }
 
-    void InterateWaypointIndex(){
+    void InterateWaypointIndex()
+    {
         patrolIndex++;
         //Debug.Log(patrolIndex == patrolRoute.Length);
-        if(patrolIndex == patrolRoute.Length){
+        if (patrolIndex == patrolRoute.Length)
+        {
             patrolIndex = 0;
         }
     }
     ///////////////////////////////////////////////
-   
+
 
     //NEVER IS USED
-    public void Flee(){
+    public void Flee()
+    {
         Debug.Log("Fleeing");
         AudioManager.instance.PlaySFX(1);
         enemy.speed = 10f;
@@ -166,14 +188,14 @@ public class EnemyBehavior : MonoBehaviour
         enemy.SetDestination(newPos);
     }
 
-    
+
     bool wander(Vector3 center, float range, out Vector3 result)
     {
 
-        Vector3 randomPoint = center + Random.insideUnitSphere * range;  
+        Vector3 randomPoint = center + Random.insideUnitSphere * range;
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomPoint, out hit, 0.4f, NavMesh.AllAreas)) 
-        { 
+        if (NavMesh.SamplePosition(randomPoint, out hit, 0.4f, NavMesh.AllAreas))
+        {
             result = hit.position;
             return true;
         }
@@ -183,27 +205,32 @@ public class EnemyBehavior : MonoBehaviour
     }
 
     //Add potential location for the enemy to stalk the player
-    public void addToPeakingLocations(GameObject obj ){
+    public void addToPeakingLocations(GameObject obj)
+    {
         //checks if a location is already considered, if not add it
         Debug.Log(obj);
-        if(!peakingNodes.Contains(obj)){
+        if (!peakingNodes.Contains(obj))
+        {
             peakingNodes.Add(obj);
         }
-        
+
     }
 
     //removes a stalking location
-    public void removeFromPeakingLocations(GameObject obj){
+    public void removeFromPeakingLocations(GameObject obj)
+    {
         peakingNodes.Remove(obj);
     }
 
 
-    void OnTriggerStay(Collider col){        
-        if(col.CompareTag("Player")){       
-            StopAllCoroutines();
+    void OnTriggerStay(Collider col)
+    {
+        if (col.CompareTag("Player"))
+        {
+            //StopAllCoroutines();
             StartCoroutine(ChasePlayer());
         }
     }
 
-    
+
 }
