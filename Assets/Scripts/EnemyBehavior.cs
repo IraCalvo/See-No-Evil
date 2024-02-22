@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -213,7 +214,6 @@ public class EnemyBehavior : MonoBehaviour
         {
             peakingNodes.Add(obj);
         }
-
     }
 
     //removes a stalking location
@@ -221,7 +221,6 @@ public class EnemyBehavior : MonoBehaviour
     {
         peakingNodes.Remove(obj);
     }
-
 
     void OnTriggerStay(Collider col)
     {
@@ -232,5 +231,11 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
-
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            SceneManager.LoadScene("HouseReal");
+        }
+    }
 }

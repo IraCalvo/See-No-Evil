@@ -50,8 +50,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         playerBody = GetComponent<Transform>();
         audioSource = GetComponent<AudioSource>();
-        gun.SetActive(false);
-        playerLight.gameObject.SetActive(false);
+        //gun.SetActive(false);
+        //playerLight.gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -89,13 +89,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnFire(InputValue value)
-    {
-        if (canShoot && ammoCount >= 1 && !eyesOpen)
-        {
-            StartCoroutine(ShootGunCoroutine());
-        }
-    }
+    //void OnFire(InputValue value)
+    //{
+    //    if (canShoot && ammoCount >= 1 && !eyesOpen)
+    //    {
+    //        StartCoroutine(ShootGunCoroutine());
+    //    }
+    //}
 
     void MovePlayer()
     {

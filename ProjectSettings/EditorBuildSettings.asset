@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/HouseReal.unity
+    guid: 115f4ba7a54979c4c8ff4d6781404b59
+  - enabled: 1
+    path: Assets/Scenes/Ending.unity
+    guid: 035d8ad44d547e64ba842acea1ba80ef
   m_configObjects: {}

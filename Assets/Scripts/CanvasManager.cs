@@ -25,7 +25,7 @@ public class CanvasManager : MonoBehaviour
         }
 
         interactText.enabled = false;
-        crossHair.SetActive(false);
+        //crossHair.SetActive(false);
     }
 
     public void RemoveStartScreen()
