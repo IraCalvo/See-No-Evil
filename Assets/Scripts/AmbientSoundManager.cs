@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AmbientSoundManager : MonoBehaviour
 {
+    [Header("This is the list of potenitial sounds")]
     [SerializeField] AudioClip[] ambientSounds;
     [SerializeField] float minimumAmountOfTimeBetweenSounds;
     [SerializeField] float maximumAmountOfTimeBetweenSounds;

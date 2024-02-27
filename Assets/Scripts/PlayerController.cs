@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
         else if (!eyesOpen && canOpenEyes)
         {
             eyesOpen = true;
-            eyes.GetComponent<Animator>().SetTrigger("OpenEyes");
+            CanvasManager.instance.Eyes.gameObject.GetComponent<Animator>().SetTrigger("OpenEyes");
             rb.velocity = Vector3.zero;
         }
     }
@@ -138,7 +138,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator StartOpenEyeTimerCoroutine()
     {
         eyesOpen = false;
-        eyes.GetComponent<Animator>().SetTrigger("CloseEyes");
+        CanvasManager.instance.Eyes.gameObject.GetComponent<Animator>().SetTrigger("CloseEyes");
         canOpenEyes = false;
         yield return new WaitForSeconds(timerToOpenEyes);
         canOpenEyes = true;

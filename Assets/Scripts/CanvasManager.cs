@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class CanvasManager : MonoBehaviour
 {
     public static CanvasManager instance;
+    public GameObject Eyes;
     public TextMeshProUGUI title;
     public TextMeshProUGUI pressSpaceBar;
     public TextMeshProUGUI interactText;
@@ -25,6 +26,7 @@ public class CanvasManager : MonoBehaviour
         }
 
         interactText.enabled = false;
+        Eyes = GameObject.Find("/Canvas/Eyes");
         //crossHair.SetActive(false);
     }
 
