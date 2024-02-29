@@ -13,7 +13,7 @@ public class EnemyPeak : MonoBehaviour
 
     public void Update()
     {
-        CheckIfPlayerPeaked();
+        //CheckIfPlayerPeaked();
         CastConeRays(transform.position, transform.forward, coneAngle, activationDistance);
     }
 
@@ -49,18 +49,38 @@ public class EnemyPeak : MonoBehaviour
 
         RaycastHit coneHit;
 
-        if (Physics.Raycast(origin, forwardDir, out coneHit, activationDistance))
+        if (Physics.Raycast(origin, forwardDir, out coneHit, length))
         {
-            Debug.DrawLine(origin, forwardDir * activationDistance, Color.green);
+            Debug.DrawLine(origin, forwardDir * length, Color.green);
+            if(coneHit.collider.CompareTag("Player") && PlayerController.instance.eyesOpen)
+            {
+                Debug.Log("Detecting player middle");
+                if (!soundFXPlayed && soundEffect.isPlaying == false)
+                {
+                    soundEffect.Play();
+                    soundFXPlayed = true;
+                    anim.SetTrigger("peakedAt");
+                }
+            }
         }
         else 
         {
             Debug.DrawLine(origin, forwardDir * length, Color.blue);
         }
 
-        if (Physics.Raycast(origin, rightDir, out coneHit, activationDistance))
+        if (Physics.Raycast(origin, rightDir, out coneHit, length))
         {
-            Debug.DrawLine(origin, rightDir * activationDistance, Color.green);
+            Debug.DrawLine(origin, rightDir * length, Color.green);
+            if (coneHit.collider.CompareTag("Player") && PlayerController.instance.eyesOpen)
+            {
+                Debug.Log("Detecting player right");
+                if (!soundFXPlayed && soundEffect.isPlaying == false)
+                {
+                    soundEffect.Play();
+                    soundFXPlayed = true;
+                    anim.SetTrigger("peakedAt");
+                }
+            }
         }
         else 
         {
@@ -69,7 +89,17 @@ public class EnemyPeak : MonoBehaviour
 
         if (Physics.Raycast(origin, leftDir, out coneHit, activationDistance))
         {
-            Debug.DrawLine(origin, leftDir * activationDistance, Color.green);
+            Debug.DrawLine(origin, leftDir * length, Color.green);
+            if (coneHit.collider.CompareTag("Player") && PlayerController.instance.eyesOpen)
+            {
+                Debug.Log("Detecting player left");
+                if (!soundFXPlayed && soundEffect.isPlaying == false)
+                {
+                    soundEffect.Play();
+                    soundFXPlayed = true;
+                    anim.SetTrigger("peakedAt");
+                }
+            }
         }
         else 
         {
