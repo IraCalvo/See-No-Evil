@@ -89,13 +89,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //void OnFire(InputValue value)
-    //{
-    //    if (canShoot && ammoCount >= 1 && !eyesOpen)
-    //    {
-    //        StartCoroutine(ShootGunCoroutine());
-    //    }
-    //}
+    void OnFire(InputValue value)
+    {
+        if (canShoot && ammoCount >= 1 && !eyesOpen && GameManager.instance.hasGun)
+        {
+            StartCoroutine(ShootGunCoroutine());
+        }
+    }
 
     void MovePlayer()
     {

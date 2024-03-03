@@ -49,62 +49,83 @@ public class EnemyPeak : MonoBehaviour
 
         RaycastHit coneHit;
 
-        if (Physics.Raycast(origin, forwardDir, out coneHit, length))
+        for(int i = 0; i < angle; i++)
         {
-            Debug.DrawLine(origin, forwardDir * length, Color.green);
-            if(coneHit.collider.CompareTag("Player") && PlayerController.instance.eyesOpen)
+            Vector3 dir = Quaternion.Euler(0, angle + i, 0) * direction.normalized;
+            if (Physics.Raycast(origin, dir, out coneHit, length)) 
             {
-                Debug.Log("Detecting player middle");
-                if (!soundFXPlayed && soundEffect.isPlaying == false)
+                Debug.DrawRay(origin, dir * length, Color.green);
+                if (coneHit.collider.CompareTag("Player") && PlayerController.instance.eyesOpen)
                 {
-                    soundEffect.Play();
-                    soundFXPlayed = true;
-                    anim.SetTrigger("peakedAt");
+                    Debug.DrawRay(origin, dir * length, Color.blue);
+                    if (!soundFXPlayed && soundEffect.isPlaying == false)
+                    {
+                        soundEffect.Play();
+                        soundFXPlayed = true;
+                        anim.SetTrigger("peakedAt");
+                    }
                 }
             }
-        }
-        else 
-        {
-            Debug.DrawLine(origin, forwardDir * length, Color.blue);
+
         }
 
-        if (Physics.Raycast(origin, rightDir, out coneHit, length))
-        {
-            Debug.DrawLine(origin, rightDir * length, Color.green);
-            if (coneHit.collider.CompareTag("Player") && PlayerController.instance.eyesOpen)
-            {
-                Debug.Log("Detecting player right");
-                if (!soundFXPlayed && soundEffect.isPlaying == false)
-                {
-                    soundEffect.Play();
-                    soundFXPlayed = true;
-                    anim.SetTrigger("peakedAt");
-                }
-            }
-        }
-        else 
-        {
-            Debug.DrawLine(origin, rightDir * length, Color.blue);
-        }
+        //if (Physics.Raycast(origin, forwardDir, out coneHit, length))
+        //{
+        //    Debug.DrawLine(origin, forwardDir * length, Color.green);
+        //    if(coneHit.collider.CompareTag("Player") && PlayerController.instance.eyesOpen)
+        //    {
+        //        Debug.Log("Detecting player middle");
+        //        if (!soundFXPlayed && soundEffect.isPlaying == false)
+        //        {
+        //            soundEffect.Play();
+        //            soundFXPlayed = true;
+        //            anim.SetTrigger("peakedAt");
+        //        }
+        //    }
+        //}
 
-        if (Physics.Raycast(origin, leftDir, out coneHit, activationDistance))
-        {
-            Debug.DrawLine(origin, leftDir * length, Color.green);
-            if (coneHit.collider.CompareTag("Player") && PlayerController.instance.eyesOpen)
-            {
-                Debug.Log("Detecting player left");
-                if (!soundFXPlayed && soundEffect.isPlaying == false)
-                {
-                    soundEffect.Play();
-                    soundFXPlayed = true;
-                    anim.SetTrigger("peakedAt");
-                }
-            }
-        }
-        else 
-        {
-            Debug.DrawLine(origin, leftDir * length, Color.blue);
-        }
+        //else 
+        //{
+        //    Debug.DrawLine(origin, forwardDir * length, Color.blue);
+        //}
+
+        //if (Physics.Raycast(origin, rightDir, out coneHit, length))
+        //{
+        //    Debug.DrawLine(origin, rightDir * length, Color.green);
+        //    if (coneHit.collider.CompareTag("Player") && PlayerController.instance.eyesOpen)
+        //    {
+        //        Debug.Log("Detecting player right");
+        //        if (!soundFXPlayed && soundEffect.isPlaying == false)
+        //        {
+        //            soundEffect.Play();
+        //            soundFXPlayed = true;
+        //            anim.SetTrigger("peakedAt");
+        //        }
+        //    }
+        //}
+        //else 
+        //{
+        //    Debug.DrawLine(origin, rightDir * length, Color.blue);
+        //}
+
+        //if (Physics.Raycast(origin, leftDir, out coneHit, activationDistance))
+        //{
+        //    Debug.DrawLine(origin, leftDir * length, Color.green);
+        //    if (coneHit.collider.CompareTag("Player") && PlayerController.instance.eyesOpen)
+        //    {
+        //        Debug.Log("Detecting player left");
+        //        if (!soundFXPlayed && soundEffect.isPlaying == false)
+        //        {
+        //            soundEffect.Play();
+        //            soundFXPlayed = true;
+        //            anim.SetTrigger("peakedAt");
+        //        }
+        //    }
+        //}
+        //else 
+        //{
+        //    Debug.DrawLine(origin, leftDir * length, Color.blue);
+        //}
     }
 
     public void animEventAnimationDone()

@@ -8,7 +8,7 @@ public class GunInteract : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        PlayerController.instance.gun.SetActive(true);
+        GameManager.instance.GunAcquired();
         CanvasManager.instance.crossHair.SetActive(true);
         CanvasManager.instance.ammoText.enabled = true;
         CanvasManager.instance.ammoText.text = "Ammo: " + PlayerController.instance.ammoCount.ToString();
