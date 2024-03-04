@@ -15,12 +15,8 @@ public class EnemyBehavior : MonoBehaviour
     //List of potential stalking locations that enemy might chose 
     public List<GameObject> peakingNodes = new List<GameObject>();
 
-    //boolean variable to check what state the monster is in
-    bool isChasing = false;
-    bool isWandering = false;
-    bool isFleeing = false;
-    bool isPatrolling = false;
-    bool isStalking = false;
+    //String variable to check what state the monster is in
+    public string state;
 
     //PatrolTarget is next location to go when isPatrol is true
     Vector3 patrolTarget;
@@ -31,24 +27,39 @@ public class EnemyBehavior : MonoBehaviour
     //The list of nodes of where to patrol
     public Transform[] patrolRoute;
 
-
+    float temp;
 
     void Start()
     {
 
         enemy = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag("Player").transform;
-        isPatrolling = true;
-        UpdatePatrolDestination();
+        state = "Patrolling";
+   
+
         //starts the monsters AI
+        UpdatePatrolDestination();
         StartCoroutine(movementOpportunity());
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("HELLO");
+            temp = enemy.speed;
+            enemy.speed = 0.001f;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            enemy.speed = temp;
+            temp = 0;
+        }
+
 
         //Always Look at the player
-        if (isChasing || isStalking)
+        if (state == "Chasing" || state == "Stalking")
         {
             transform.LookAt(player.position);
         }
@@ -58,43 +69,37 @@ public class EnemyBehavior : MonoBehaviour
 
         }
 
-        //When is Chasing is true follow player
-        if (isChasing)
+        switch(state)
         {
-            enemy.SetDestination(player.position);
-        }
+            case "Chasing":
+                enemy.SetDestination(player.position);
+                break;
 
-
-        if (isWandering)
-        {
-            if (enemy.remainingDistance <= enemy.stoppingDistance) //done with path
-            {
-                Vector3 point;
-                if (wander(transform.position, 5.0f, out point)) //pass in our centre point and radius of area
+            case "Wandering":
+                if (enemy.remainingDistance <= enemy.stoppingDistance) //done with path
                 {
-                    Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
-                    enemy.SetDestination(point);
+                    Vector3 point;
+                    if (wander(transform.position, 5.0f, out point)) //pass in our centre point and radius of area
+                    {
+                        Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
+                        enemy.SetDestination(point);
+                    }
                 }
-            }
+                break;
+
+            case "Patrolling":
+                if (Vector3.Distance(transform.position, patrolTarget) < 1.5f)
+                {
+                    UpdatePatrolDestination();
+                    InterateWaypointIndex();
+                }
+                break;
+
+            case "Fleeing":
+                Flee();
+                break;
+
         }
-
-        if (isPatrolling)
-        {
-            Debug.Log(Vector3.Distance(transform.position, patrolTarget));
-            if (Vector3.Distance(transform.position, patrolTarget) < 1.5f)
-            {
-                UpdatePatrolDestination();
-                InterateWaypointIndex();
-            }
-        }
-
-
-        //NEVER GETS CALLED
-        if (isFleeing)
-        {
-            Flee();
-        }
-
 
     }
 
@@ -106,21 +111,15 @@ public class EnemyBehavior : MonoBehaviour
 
             if (Random.value < 0.5f && peakingNodes.Count > 0)
             {
-                isPatrolling = false;
-                isStalking = true;
                 StartCoroutine(Stalk());
-
             }
             else
             {
-                isPatrolling = true;
-                Debug.Log("Is p " + isPatrolling);
+                state = "Patrolling";
                 enemy.speed = 2f;
                 UpdatePatrolDestination();
-                Debug.Log("Patroling");
             }
             yield return new WaitForSeconds(5f);
-            //Debug.Log("New Decesion has been made");
         }
     }
 
@@ -128,34 +127,29 @@ public class EnemyBehavior : MonoBehaviour
     {
         Debug.Log("Chasing");
         enemy.speed = 2f;
-        isChasing = true;
+        state = "Chasing";
         yield return new WaitForSeconds(5f);
-        isChasing = false;
         StartCoroutine(Wandering());
 
     }
 
     IEnumerator Wandering()
     {
-        Debug.Log("Wandering");
         enemy.speed = 2f;
-        isWandering = true;
+        state = "Wandering";
         yield return new WaitForSeconds(8f);
         StartCoroutine(movementOpportunity());
-        isWandering = false;
-
     }
 
     IEnumerator Stalk()
     {
-        Debug.Log("Stalking");
+        state = "Stalking";
         if (peakingNodes.Count > 0)
         {
             enemy.speed = 8f;
             enemy.SetDestination(peakingNodes[Random.Range(0, peakingNodes.Count)].transform.position);
         }
         yield return new WaitForSeconds(8f);
-        isStalking = false;
     }
 
     //Deals with patrols and updating where to go
@@ -181,7 +175,7 @@ public class EnemyBehavior : MonoBehaviour
     //NEVER IS USED
     public void Flee()
     {
-        Debug.Log("Fleeing");
+        state = "Fleeing";
         AudioManager.instance.PlaySFX(1);
         enemy.speed = 10f;
         Vector3 FleeDestination = transform.position - player.position;
@@ -209,7 +203,6 @@ public class EnemyBehavior : MonoBehaviour
     public void addToPeakingLocations(GameObject obj)
     {
         //checks if a location is already considered, if not add it
-        Debug.Log(obj);
         if (!peakingNodes.Contains(obj))
         {
             peakingNodes.Add(obj);
@@ -226,7 +219,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            //StopAllCoroutines();
+            StopAllCoroutines();
             StartCoroutine(ChasePlayer());
         }
     }
