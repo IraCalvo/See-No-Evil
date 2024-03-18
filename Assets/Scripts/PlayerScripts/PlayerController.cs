@@ -3,37 +3,44 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
+    [Header("PlayerStats")]
     [SerializeField] float moveSpeed;
     [SerializeField] float mouseSens;
-    [SerializeField] float timerToOpenEyes;
+    [SerializeField] float gravity = 10f;
+
+    [Header("Player's Eyes")]
     [SerializeField] GameObject eyes;
-    public GameObject gun;
-    [SerializeField] float timeBetweenShots;
-    [SerializeField] AudioClip[] footSteps;
-    public Transform playerLight;
+    [SerializeField] float timerToOpenEyes;
     public bool eyesOpen = true;
     bool canOpenEyes;
     bool canShoot = true;
-    bool footStepsPlaying;
-    public int ammoCount;
     bool hasBlinkedOnce = false;
 
+    [Header("Player's Gun")]
+    public GameObject gun;
+    [SerializeField] float timeBetweenShots;
+    public int ammoCount;
+
+    [Header("Misc/Hookups")]
+    [SerializeField] AudioClip[] footSteps;
+    public Transform playerLight;
+    bool footStepsPlaying;
+
+    CharacterController characterController;
     float verticalRotation = 0f;
     private Vector2 playerMovement;
     private Vector2 mouseDelta;
-    Rigidbody rb;
+    private Vector3 moveDirection = Vector3.zero;
     Transform playerBody;
     AudioSource audioSource;
-
-    [Header("bools for player progression")]
-    public bool hasKey;
-    public bool hasWrench;
 
     private void Awake()
     {
@@ -47,15 +54,16 @@ public class PlayerController : MonoBehaviour
         }
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        rb = GetComponent<Rigidbody>();
         playerBody = GetComponent<Transform>();
         audioSource = GetComponent<AudioSource>();
+        characterController = GetComponent<CharacterController>();
         //gun.SetActive(false);
         //playerLight.gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
     {
+        Gravity();
         MovePlayer();
     }
 
@@ -81,20 +89,26 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(StartOpenEyeTimerCoroutine());
         }
+        //eyes open cant move
         else if (!eyesOpen && canOpenEyes)
         {
             eyesOpen = true;
             CanvasManager.instance.Eyes.gameObject.GetComponent<Animator>().SetTrigger("OpenEyes");
-            rb.velocity = Vector3.zero;
         }
     }
 
     void OnFire(InputValue value)
     {
-        if (canShoot && ammoCount >= 1 && !eyesOpen && GameManager.instance.hasGun)
-        {
-            StartCoroutine(ShootGunCoroutine());
-        }
+        //if (canShoot && ammoCount >= 1 && !eyesOpen && GameManager.instance.hasGun)
+        //{
+        //    StartCoroutine(ShootGunCoroutine());
+        //}
+    }
+
+    void Gravity()
+    {
+        moveDirection.y += gravity * Time.deltaTime;
+        var flags = characterController.Move(moveDirection * Time.deltaTime);
     }
 
     void MovePlayer()
@@ -102,24 +116,32 @@ public class PlayerController : MonoBehaviour
         //eyes are closed and can move
         if (!eyesOpen)
         {
-            Vector3 forwardDirection = playerBody.forward;
-            Vector3 movement = forwardDirection * playerMovement.y + playerBody.right * playerMovement.x;
-            rb.velocity = movement * moveSpeed;
-            if (rb.velocity.magnitude > 0)
+            Vector3 forwardDirection = playerBody.TransformDirection(Vector3.right);
+            Vector3 rightDirection = playerBody.TransformDirection(Vector3.forward);
+
+            float currentSpeedX = (moveSpeed * playerMovement.x);
+            float currentSpeedY = (moveSpeed) * playerMovement.y;
+            moveDirection = (forwardDirection * currentSpeedX) + (rightDirection * currentSpeedY);
+
+            characterController.Move(moveDirection * Time.deltaTime);
+
+            //rotates camera
+            verticalRotation -= mouseDelta.y * mouseSens;
+            verticalRotation = Mathf.Clamp(verticalRotation, -90f, 75f);
+            Camera.main.transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+            transform.rotation *= Quaternion.Euler(0, mouseDelta.x * mouseSens, 0);
+
+            //footsteps sfx
+            if (footStepsPlaying == false)
             {
-                if (footStepsPlaying == false)
-                {
-                    PlayFootStepSFX();
-                    footStepsPlaying = true;
-                }
+                PlayFootStepSFX();
+                footStepsPlaying = true;
             }
         }
-
-        playerBody.Rotate(Vector3.up * mouseDelta.x * mouseSens * Time.fixedDeltaTime);
-
-        verticalRotation -= mouseDelta.y * mouseSens * Time.fixedDeltaTime;
-        verticalRotation = Mathf.Clamp(verticalRotation, -90f, 75f);
-        Camera.main.transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+        else
+        {
+            moveDirection = Vector3.zero;
+        }
     }
 
     void PlayFootStepSFX()

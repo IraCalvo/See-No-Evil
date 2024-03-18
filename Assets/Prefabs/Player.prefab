@@ -378,10 +378,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3277654442616451882}
   - component: {fileID: 8196679065882893608}
-  - component: {fileID: 8244724578791662358}
   - component: {fileID: 2259764149791668379}
   - component: {fileID: 3140236490237746564}
   - component: {fileID: 6918271738168911161}
+  - component: {fileID: 6094707177251196025}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -439,33 +439,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!54 &8244724578791662358
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7139262700857725335}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 112
-  m_CollisionDetection: 1
 --- !u!114 &2259764149791668379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,22 +451,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df47ec3ca48f42544ae9c81bc9cc07a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  mouseSens: 10
-  timerToOpenEyes: 0
+  moveSpeed: 3
+  mouseSens: 0.5
+  gravity: -1000
   eyes: {fileID: 0}
+  timerToOpenEyes: 0
+  eyesOpen: 1
   gun: {fileID: 2081547033495586250}
   timeBetweenShots: 1
+  ammoCount: 10
   footSteps:
   - {fileID: 8300000, guid: 5192a72c6b0c3404a935a402edb0faaa, type: 3}
   - {fileID: 8300000, guid: eeb9f277ad5222f4ea66c6ba7db64f81, type: 3}
   - {fileID: 8300000, guid: 25025f175c7ad3646b98be2f77ee65f7, type: 3}
   - {fileID: 8300000, guid: f04d79e24f1b17241ae1d488d812b076, type: 3}
   playerLight: {fileID: 0}
-  eyesOpen: 1
-  ammoCount: 10
-  hasKey: 0
-  hasWrench: 0
 --- !u!114 &3140236490237746564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,6 +575,32 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!143 &6094707177251196025
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7139262700857725335}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8891423079045707578
 GameObject:
   m_ObjectHideFlags: 0

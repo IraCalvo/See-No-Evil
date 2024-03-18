@@ -8,7 +8,7 @@ public class Wrench : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        PlayerController.instance.hasWrench = false;
+        GameManager.instance.hasWrench = true;
         gameObject.SetActive(false);
     }
 

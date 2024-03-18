@@ -8,7 +8,7 @@ public class Keys : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        PlayerController.instance.hasKey = false;
+        GameManager.instance.hasKey = false;
         AudioManager.instance.PlaySFX(2);
         gameObject.SetActive(false);
     }

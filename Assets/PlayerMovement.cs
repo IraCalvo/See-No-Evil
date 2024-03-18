@@ -36,11 +36,6 @@ public class PlayerMovement : MonoBehaviour
         float movementDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-
-
-
-
-
         moveDirection.y = movementDirectionY;
         
 
@@ -48,8 +43,6 @@ public class PlayerMovement : MonoBehaviour
         {
             moveDirection.y -= gravity * Time.deltaTime;
         }
-
-
 
         characterController.Move(moveDirection * Time.deltaTime);
 

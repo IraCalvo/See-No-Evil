@@ -13,8 +13,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Player current progression things")]
     public float currentFloorPlayerIsOn;
-    public bool haskey;
+    public bool hasKey = false;
     public bool hasGun = false;
+    public bool hasWrench = false;
 
     private void Awake()
     {

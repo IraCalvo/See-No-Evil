@@ -8,7 +8,7 @@ public class Door : MonoBehaviour, IInteractable
     
     public void Interact()
     {
-        if (PlayerController.instance.hasKey == true)
+        if (GameManager.instance.hasKey == true)
         {
             gameObject.SetActive(false);
         }
@@ -16,12 +16,12 @@ public class Door : MonoBehaviour, IInteractable
 
     public void InteractText()
     {
-        if (PlayerController.instance.eyesOpen && PlayerController.instance.hasKey == false)
+        if (PlayerController.instance.eyesOpen && GameManager.instance.hasKey == false)
         {
             CanvasManager.instance.interactText.text = "requires key to escape";
             CanvasManager.instance.interactText.enabled = true;
         }
-        if (PlayerController.instance.eyesOpen && PlayerController.instance.hasKey == true)
+        if (PlayerController.instance.eyesOpen && GameManager.instance.hasKey == true)
         {
             CanvasManager.instance.interactText.text = interactTextToShow;
             CanvasManager.instance.interactText.enabled = true;
